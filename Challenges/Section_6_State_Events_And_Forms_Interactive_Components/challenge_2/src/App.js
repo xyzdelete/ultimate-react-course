@@ -12,7 +12,6 @@ export default function App() {
 function Counter() {
   const [count, setCount] = useState(0);
   const [step, setStep] = useState(1);
-  const [input, setInput] = useState(0);
 
   const date = new Date();
   date.setDate(date.getDate() + count);
@@ -21,32 +20,17 @@ function Counter() {
     setStep(Number(e.target.value));
   }
 
-  function handleInputChange(e) {
-    setInput(Number(e.target.value));
-  }
-
   function handleReset() {
-    setInput(0);
     setCount(0);
     setStep(1);
   }
 
   function handleIncrement() {
-    if (step !== 0) {
-      setInput((input) => input + step);
-      setCount((c) => c + input);
-    } else {
-      setCount((c) => c + input);
-    }
+    setCount((c) => c + step);
   }
 
   function handleDecrement() {
-    if (step !== 0) {
-      setInput((input) => input - step);
-      setCount((c) => c - input);
-    } else {
-      setCount((c) => c - input);
-    }
+    setCount((c) => c - step);
   }
 
   return (
@@ -56,6 +40,7 @@ function Counter() {
           type="range"
           min="0"
           max="10"
+          value={step}
           onChange={(e) => handleSliderChange(e)}
         />
         <span>{step}</span>
@@ -65,9 +50,9 @@ function Counter() {
         <button onClick={handleDecrement}>-</button>
         <input
           type="text"
-          onChange={(e) => handleInputChange(e)}
-          placeholder={input}
-          value={input}
+          onChange={(e) => setCount(Number(e.target.value))}
+          placeholder={count}
+          value={count}
         />
         <button onClick={handleIncrement}>+</button>
       </div>
@@ -83,7 +68,9 @@ function Counter() {
         <span>{date.toDateString()}</span>
       </p>
 
-      <button onClick={handleReset}>Reset</button>
+      {count !== 0 || step !== 1 ? (
+        <button onClick={handleReset}>Reset</button>
+      ) : null}
     </div>
   );
 }
